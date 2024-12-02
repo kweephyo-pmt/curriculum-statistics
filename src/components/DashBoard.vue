@@ -58,6 +58,8 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { signOut } from "firebase/auth"; // Import the signOut method
+import { auth } from "@/firebase"; // Import the Firebase auth instance
 
 // Add the icon to the library
 library.add(faRightFromBracket);
@@ -86,16 +88,18 @@ export default {
     };
   },
   methods: {
-    logout() {
-      // Implement your logout logic here
-      console.log('Logging out...');
-      // For example, if you're using Firebase:
-      // firebase.auth().signOut().then(() => {
-      //   this.$router.push('/login');
-      // });
+    async logout() {
+      try {
+        // Sign out the user using Firebase Auth
+        await signOut(auth);
+        console.log('Successfully logged out.');
 
-      // Redirect to login page after logging out
-      this.$router.push('/login');
+        // Redirect to the login page after logging out
+        this.$router.push('/login');
+      } catch (error) {
+        console.error('Error logging out:', error);
+        this.$router.push('/login'); // Redirect even if there's an error for a smoother UX
+      }
     }
   }
 };
