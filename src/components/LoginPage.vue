@@ -1,24 +1,27 @@
 <template>
-   <!-- Header Section -->
-   <header class="bg-white shadow-md py-4 px-8">
-      <div class="flex items-center justify-between max-w-7xl mx-auto">
-        <div class="flex items-center space-x-3">
-          <!-- Logo -->
-          <img src="@/assets/mfu.png" alt="Logo" class="w-10 h-15" />
+  <!-- Header Section -->
+  <header class="bg-white shadow-lg py-4 px-8">
+      <div class="flex items-center justify-between max-w-7xl mx-auto">     
+        <div class="flex items-center space-x-4">
+         <!-- Logo wrapped in a router-link -->
+          <router-link to="/">
+            <img src="@/assets/mfu.png" alt="Logo" class="w-12 h-16" />
+          </router-link>
           <!-- App Title -->
-          <h1 class="text-3xl font-extrabold text-indigo-600">SOM BI</h1>
+          <h1 class="text-4xl font-extrabold text-indigo-600 tracking-wide">SOM BI</h1>
         </div>
-        <nav>
-          <ul class="flex space-x-6">
-            <li><a href="/" class="text-gray-600 hover:text-gray-800">Home</a></li>
-            <li><a href="/about" class="text-gray-600 hover:text-gray-800">About</a></li>
-            <li><a href="/contact" class="text-gray-600 hover:text-gray-800">Contact</a></li>
+      <nav>
+        <ul class="flex space-x-8 text-lg font-medium">
+            <li><a href="/" class="text-gray-600 hover:text-indigo-600 transition duration-300">Home</a></li>
+            <li><a href="/about" class="text-gray-600 hover:text-indigo-600 transition duration-300">About</a></li>
+            <li><a href="/contact" class="text-gray-600 hover:text-indigo-600 transition duration-300">Contact</a></li>
           </ul>
-        </nav>
-      </div>
-    </header>
-  <div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 animate-gradient">
-    
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 animate-gradient">
     <div class="bg-white p-8 rounded-lg shadow-xl w-full sm:w-96 transform transition-all duration-500 hover:scale-105">
       <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8 animate-fadeIn">Login</h2>
 
@@ -115,12 +118,13 @@
       </div>
     </div>
   </div>
-    <!-- Footer Section -->
-    <footer class="bg-white py-4">
-      <div class="text-center">
-        <p class="text-sm text-gray-500">© 2024 Curriculum Statistics. All rights reserved.</p>
-      </div>
-    </footer>
+
+  <!-- Footer Section -->
+  <footer class="bg-white py-4">
+    <div class="text-center">
+      <p class="text-sm text-gray-500">© 2024 Curriculum Statistics. All rights reserved.</p>
+    </div>
+  </footer>
 </template>
 
 <script>
@@ -247,7 +251,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 /* Gradient animation */
 @keyframes gradientBackground {
@@ -283,6 +286,26 @@ export default {
 .animate-fadeIn {
   animation: fadeIn 1s ease-out;
 }
+
+/* Improved font for better readability */
+h1, h2 {
+  font-family: 'Inter', sans-serif;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Make sure that the footer and header don't block scroll */
+body {
+  overflow-y: auto;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom styling for header */
 header {
   background-color: white;
 }
@@ -290,6 +313,22 @@ header {
 /* Custom styling for footer */
 footer {
   background-color: white;
+  box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Button custom styling */
+button {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Ensure main section fills the remaining space */
+main {
+  min-height: calc(100vh - 120px); /* Adjust for header + footer height */
+}
+
+/* Custom styling for footer */
+footer {
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

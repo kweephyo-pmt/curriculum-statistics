@@ -27,7 +27,7 @@
 import Dashboard from "@/components/DashBoard.vue";
 
 export default {
-  name: "ResearchPage",
+  name: "CurriculumStatistics",
   components: {
     Dashboard, // Register the Dashboard component
   },

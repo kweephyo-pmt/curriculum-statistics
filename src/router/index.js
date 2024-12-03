@@ -2,22 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from '../components/WelcomePage.vue'
 import Login from '../components/LoginPage.vue'
 import Dashboard from '../components/DashBoard.vue'
-import { auth } from '@/firebase';  // Make sure to import auth from Firebase
+import { auth } from '@/firebase';
 
 const routes = [
   { path: '/', component: Welcome },
   { path: '/login', component: Login },
-  { path: '/dashboard', 
-    component: Dashboard, 
-    beforeEnter: (to, from, next) => {
-      const user = auth.currentUser;
-      if (user) {
-        next();
-      } else {
-        next('/login');
-      }
-    }
-  },
+  { path: '/dashboard', component: Dashboard },  // Removed the beforeEnter guard here
   { path: "/Overview", name: "Overview", component: () => import("../views/OverviewPage.vue") },
   { path: "/kpi", name: "KPI", component: () => import("../views/KPIPage.vue") },
   { path: "/curriculum-statistics", name: "Curriculum Statistics", component: () => import("../views/CurriculumStatistics.vue") },
@@ -36,18 +26,16 @@ const router = createRouter({
   routes
 });
 
-// Apply a global navigation guard
+// Global navigation guard
 router.beforeEach((to, from, next) => {
-  // Skip the guard for the Welcome and Login pages
   if (to.path === '/' || to.path === '/login') {
     next();
   } else {
-    // Check if the user is authenticated
     const user = auth.currentUser;
     if (user) {
-      next();  // Proceed to the route
+      next();  // Proceed if authenticated
     } else {
-      next('/login');  // Redirect to the login page if not authenticated
+      next('/login');  // Redirect to login if not authenticated
     }
   }
 });

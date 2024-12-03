@@ -1,38 +1,40 @@
 <template>
   <div class="flex flex-col min-h-screen bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 animate-gradient">
     <!-- Header Section -->
-    <header class="bg-white shadow-md py-4 px-8">
+    <header class="bg-white shadow-lg py-4 px-8">
       <div class="flex items-center justify-between max-w-7xl mx-auto">     
-        <div class="flex items-center space-x-3">
-          <!-- Logo -->
-          <img src="@/assets/mfu.png" alt="Logo" class="w-10 h-15" />
+        <div class="flex items-center space-x-4">
+         <!-- Logo wrapped in a router-link -->
+         <router-link to="/">
+            <img src="@/assets/mfu.png" alt="Logo" class="w-12 h-16" />
+          </router-link>
           <!-- App Title -->
-          <h1 class="text-3xl font-extrabold text-indigo-600">SOM BI</h1>
+          <h1 class="text-4xl font-extrabold text-indigo-600 tracking-wide">SOM BI</h1>
         </div>
         <nav>
-          <ul class="flex space-x-6">
-            <li><a href="/" class="text-gray-600 hover:text-gray-800">Home</a></li>
-            <li><a href="/about" class="text-gray-600 hover:text-gray-800">About</a></li>
-            <li><a href="/contact" class="text-gray-600 hover:text-gray-800">Contact</a></li>
+          <ul class="flex space-x-8 text-lg font-medium">
+            <li><a href="/" class="text-gray-600 hover:text-indigo-600 transition duration-300">Home</a></li>
+            <li><a href="/about" class="text-gray-600 hover:text-indigo-600 transition duration-300">About</a></li>
+            <li><a href="/contact" class="text-gray-600 hover:text-indigo-600 transition duration-300">Contact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow flex items-center justify-center text-center">
+    <main class="flex-grow flex items-center justify-center text-center px-6 min-h-[calc(100vh-120px)]">
       <div class="text-center">
-        <h2 class="text-4xl font-extrabold text-white mb-6 animate-slideIn">Welcome to SOM BI</h2>
+        <h2 class="text-5xl font-extrabold text-white mb-8 animate-slideIn">Welcome to SOM BI</h2>
         <button 
           @click="goToLogin"
-          class="bg-blue-600 text-white py-3 px-6 rounded-full text-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 animate-fadeInUp">
-          Go to Login
+          class="bg-indigo-600 text-white py-4 px-8 rounded-full text-xl hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 animate-fadeInUp shadow-lg">
+          Click here to Login
         </button>
       </div>
     </main>
 
     <!-- Footer Section -->
-    <footer class="bg-white py-4 mt-8">
+    <footer class="bg-white py-6 mt-12 shadow-inner">
       <div class="text-center">
         <p class="text-sm text-gray-500">© 2024 Curriculum Statistics. All rights reserved.</p>
       </div>
@@ -74,7 +76,7 @@ export default {
 @keyframes slideIn {
   0% {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-30px);
   }
   100% {
     opacity: 1;
@@ -86,7 +88,7 @@ export default {
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   100% {
     opacity: 1;
@@ -111,6 +113,45 @@ header {
 /* Custom styling for footer */
 footer {
   background-color: white;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Button custom styling */
+button {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  background-color: #4f46e5; /* Indigo 600 */
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Improved font for better readability */
+h1, h2 {
+  font-family: 'Inter', sans-serif;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Make sure that the footer and header don't block scroll */
+body {
+  overflow-y: auto;
+}
+
+/* Ensure main section fills the remaining space */
+main {
+  min-height: calc(100vh - 120px); /* Adjust for header + footer height */
+}
+
 </style>

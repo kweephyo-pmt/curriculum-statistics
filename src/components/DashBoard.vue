@@ -5,7 +5,7 @@
       <!-- Left Side: Hamburger Menu and Logo + Title -->
       <div class="flex items-center space-x-3">
         <!-- Hamburger Menu (Visible on all screen sizes) -->
-        <div class="cursor-pointer lg:hidden z-30" @click="$emit('toggleSidebar')">
+        <div class="cursor-pointer lg:hidden z-30" @click="$emit('toggleSidebar')" aria-label="Open Sidebar">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -20,13 +20,15 @@
         </div>
       </div>
 
-     <!-- Right Side: Logout Icon -->
-     <div>
+      <!-- Right Side: Logout Icon -->
+      <div>
+        <!-- Logout Button -->
         <button 
-          @click="logout"
-          class="text-white hover:text-red-400 transition-all duration-300 transform hover:scale-105">
-          <!-- Font Awesome Logout Icon -->
-          <font-awesome-icon :icon="['fas', 'right-from-bracket']" class="w-8 h-8"/>
+          @click="showLogoutModal = true"
+          class="text-white hover:text-red-400 transition-all duration-300 transform hover:scale-105" 
+          aria-label="Logout"
+        >
+          <font-awesome-icon :icon="['fas', 'right-from-bracket']" class="w-8 h-8" />
         </button>
       </div>
     </div>
@@ -39,16 +41,33 @@
       ]"
     >
       <h2 class="text-4xl font-bold mb-6 text-center text-white">SOM BI</h2>
+      <!-- Menu Items -->
       <ul class="space-y-4">
         <li v-for="(item, index) in menuItems" :key="index">
           <router-link
             :to="item.path"
-            class="block text-lg font-medium text-gray-200 hover:text-white hover:bg-gray-700 py-2 px-4 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+            class="flex items-center space-x-4 text-lg font-medium text-gray-300 hover:text-white hover:bg-gray-700 py-2 px-4 rounded-lg transition-all duration-300 ease-in-out"
+            :class="{ 'bg-gray-700 text-white': $route.path === item.path }"
           >
-            {{ item.label }}
+            <span class="w-6 h-6">
+              <font-awesome-icon :icon="item.icon" />
+            </span>
+            <span>{{ item.label }}</span>
           </router-link>
         </li>
       </ul>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div v-if="showLogoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-40">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+        <h3 class="text-xl font-semibold mb-4 text-center">Confirm Logout</h3>
+        <p class="text-gray-600 text-center">Are you sure you want to log out?</p>
+        <div class="mt-6 flex justify-between">
+          <button @click="logout" class="bg-[#034E69] text-white px-4 py-2 rounded-md hover:bg-gray-700">Logout</button>
+          <button @click="showLogoutModal = false" class="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -57,12 +76,25 @@
 // Import the necessary Font Awesome components
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import {
+  faRightFromBracket,
+  faHome,
+  faChartLine,
+  faGraduationCap,
+  faBriefcase,
+  faHandshake,
+  faUserTie,
+  faUserGraduate,
+  faUsers,
+  faGlobe,
+  faBookOpen,
+  faCogs,
+} from "@fortawesome/free-solid-svg-icons";
 import { signOut } from "firebase/auth"; // Import the signOut method
 import { auth } from "@/firebase"; // Import the Firebase auth instance
 
-// Add the icon to the library
-library.add(faRightFromBracket);
+// Add the icons to the library
+library.add(faRightFromBracket, faHome, faChartLine, faUserGraduate, faGraduationCap, faBriefcase, faBookOpen, faHandshake, faUserTie, faUsers, faGlobe, faCogs);
 
 export default {
   components: {
@@ -73,18 +105,19 @@ export default {
   },
   data() {
     return {
+      showLogoutModal: false, // Controls modal visibility
       menuItems: [
-        { label: "Home", path: "/Overview" },
-        { label: "KPI", path: "/kpi" },
-        { label: "Curriculum Statistics", path: "/curriculum-statistics" },
-        { label: "Research", path: "/research" },
-        { label: "Academic Service", path: "/academic-service" },
-        { label: "Collaboration", path: "/collaboration" },
-        { label: "Faculty & Staff", path: "/faculty-staff" },
-        { label: "Alumni", path: "/alumni" },
-        { label: "SDGs Impact", path: "/sdgs-impact" },
-        { label: "Management", path: "/management" }
-      ]
+        { label: "Home", path: "/Overview", icon: ["fas", "home"] },
+        { label: "KPI", path: "/kpi", icon: ["fas", "chart-line"] },
+        { label: "Curriculum Statistics", path: "/curriculum-statistics", icon: ["fas", "graduation-cap"] },
+        { label: "Research", path: "/research", icon: ["fas", "briefcase"] },
+        { label: "Academic Service", path: "/academic-service", icon: ["fas", "book-open"] },
+        { label: "Collaboration", path: "/collaboration", icon: ["fas", "handshake"] },
+        { label: "Faculty & Staff", path: "/faculty-staff", icon: ["fas", "users"] },
+        { label: "Alumni", path: "/alumni", icon: ["fas", "user-graduate"] },
+        { label: "SDGs Impact", path: "/sdgs-impact", icon: ["fas", "globe"] },
+        { label: "Management", path: "/management", icon: ["fas", "cogs"] },
+      ],
     };
   },
   methods: {
@@ -93,21 +126,19 @@ export default {
         // Sign out the user using Firebase Auth
         await signOut(auth);
         console.log('Successfully logged out.');
-
-        // Redirect to the login page after logging out
-        this.$router.push('/login');
+        this.$router.push('/login'); // Redirect to login page after logout
       } catch (error) {
         console.error('Error logging out:', error);
-        this.$router.push('/login'); // Redirect even if there's an error for a smoother UX
+        this.$router.push('/login'); // Redirect even if there's an error
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-
 <style scoped>
 /* App Bar Styles */
+
 .bg-custom {
   background-color: #034E69;
 }
@@ -194,6 +225,11 @@ ul li a {
   padding-bottom: 0.5rem;
   font-size: 1rem; /* Slightly smaller font size */
 }
+ul li a:hover {
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
 
 /* Media Queries for Responsiveness */
 @media (min-width: 1024px) {
@@ -211,4 +247,16 @@ ul li a {
     margin-left: 16rem; /* Sidebar width */
   }
 }
+
+button:hover {
+  color: #787878; /* Change color on hover */
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+.mt-6.flex.justify-between {
+  justify-content: space-evenly;
+  gap: 1rem; /* Add consistent spacing between buttons */
+}
+
+
 </style>
