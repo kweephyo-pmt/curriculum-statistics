@@ -1,33 +1,23 @@
 <template>
   <div>
     <!-- App Bar with Hamburger Menu and Logout Button -->
-    <div class="bg-[#034E69] text-white p-4 fixed top-0 left-0 w-full z-20 flex justify-between items-center shadow-md">
-      <!-- Left Side: Hamburger Menu and Logo + Title -->
+    <div class="bg-[#034E69] text-white p-3 fixed top-0 left-0 w-full z-20 flex justify-between items-center shadow-md">
       <div class="flex items-center space-x-3">
-        <!-- Hamburger Menu (Visible on all screen sizes) -->
-        <div class="cursor-pointer lg:hidden z-30" @click="$emit('toggleSidebar')" aria-label="Open Sidebar">
+        <!-- Hamburger Menu -->
+        <div class="cursor-pointer z-30" @click="$emit('toggleSidebar')" aria-label="Open Sidebar">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </div>
-
         <!-- Logo and App Title -->
         <div class="flex items-center space-x-3">
-          <!-- Logo -->
           <img src="@/assets/mfu.png" alt="Logo" class="w-8 h-12" />
-          <!-- App Title -->
-          <h2 class="text-2xl font-semibold">SOM BI</h2>
+          <h2 class="text-xl font-semibold">SOM BI</h2>
         </div>
       </div>
-
-      <!-- Right Side: Logout Icon -->
       <div>
         <!-- Logout Button -->
-        <button 
-          @click="showLogoutModal = true"
-          class="text-white hover:text-red-400 transition-all duration-300 transform hover:scale-105" 
-          aria-label="Logout"
-        >
+        <button @click="showLogoutModal = true" class="text-white transition-all duration-300 transform hover:scale-105" aria-label="Logout">
           <font-awesome-icon :icon="['fas', 'right-from-bracket']" class="w-8 h-8" />
         </button>
       </div>
@@ -37,40 +27,65 @@
     <div
       :class="[
         sidebarOpen ? 'translate-x-0' : '-translate-x-full',
-        'bg-[#034E69] text-white w-64 p-6 fixed top-0 left-0 h-full z-10 transition-transform duration-300 ease-in-out'
+        'bg-[#F3F4F6] text-[#1F2937] w-64 p-4 fixed top-0 left-0 h-full z-10 transition-transform duration-300 ease-in-out shadow-lg flex flex-col'
       ]"
     >
-      <h2 class="text-4xl font-bold mb-6 text-center text-white">SOM BI</h2>
-      <!-- Menu Items -->
-      <ul class="space-y-4">
+      <h2 class="text-3xl font-bold mb-4 text-center text-[#034E69]">SOM BI</h2>
+      <ul class="space-y-3 flex-1">
         <li v-for="(item, index) in menuItems" :key="index">
           <router-link
             :to="item.path"
-            class="flex items-center space-x-4 text-lg font-medium text-gray-300 hover:text-white hover:bg-gray-700 py-2 px-4 rounded-lg transition-all duration-300 ease-in-out"
-            :class="{ 'bg-gray-700 text-white': $route.path === item.path }"
+            class="flex items-center space-x-4 text-lg font-medium py-2 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#034E69] focus:ring-offset-2"
+            :class="{
+              'bg-gray-300 text-[#034E69] font-semibold': $route.path === item.path, // Selected state
+              'text-[#034E69] hover:bg-gray-200 hover:text-[#034E69]': $route.path !== item.path || $route.path === item.path // Permanent hover effect for selected items
+            }"
           >
-            <span class="w-6 h-6">
+            <span class="w-6 h-6" :class="{
+              'text-[#034E69]': $route.path === item.path,
+              'text-gray-600 hover:text-[#034E69]': $route.path !== item.path
+            }">
               <font-awesome-icon :icon="item.icon" />
             </span>
-            <span>{{ item.label }}</span>
+            <span :class="{
+              'text-[#034E69]': $route.path === item.path,
+              'text-gray-600 hover:text-[#034E69]': $route.path !== item.path
+            }">
+              {{ item.label }}
+            </span>
           </router-link>
         </li>
       </ul>
+
+      <!-- Logout Button at Bottom -->
+      <div class="mt-auto">
+        <button @click="showLogoutModal = true" class="w-full text-white flex items-center justify-center space-x-3 py-2 px-4 rounded-lg transition-all duration-300 ease-in-out bg-[#034E69] hover:bg-gray-700">
+          <font-awesome-icon :icon="['fas', 'right-from-bracket']" class="w-6 h-6" />
+          <span>Logout</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Logout Confirmation Modal -->
+   <!-- Logout Confirmation Modal -->
     <div v-if="showLogoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-40">
-      <div class="bg-white p-6 rounded-lg shadow-lg w-80">
-        <h3 class="text-xl font-semibold mb-4 text-center">Confirm Logout</h3>
-        <p class="text-gray-600 text-center">Are you sure you want to log out?</p>
-        <div class="mt-6 flex justify-between">
-          <button @click="logout" class="bg-[#034E69] text-white px-4 py-2 rounded-md hover:bg-gray-700">Logout</button>
-          <button @click="showLogoutModal = false" class="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">Cancel</button>
+      <div class="bg-white p-8 rounded-lg shadow-lg w-96 max-w-sm transition-all transform scale-95 hover:scale-100">
+        <h3 class="text-2xl font-semibold mb-6 text-center text-[#034E69]">Confirm Logout</h3>
+        <p class="text-gray-600 text-center mb-6">Are you sure you want to log out?</p>
+        <div class="flex justify-center gap-4">
+          <!-- Logout Button -->
+          <button @click="logout" class="w-32 bg-[#034E69] text-white py-2 rounded-md hover:bg-[#022F48] transition-all duration-300 transform hover:scale-105 focus:outline-none">
+            Logout
+          </button>
+          <!-- Cancel Button -->
+          <button @click="showLogoutModal = false" class="w-32 bg-gray-300 text-gray-700 py-2 rounded-md hover:bg-gray-400 transition-all duration-300 transform hover:scale-105 focus:outline-none">
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 // Import the necessary Font Awesome components
@@ -121,33 +136,23 @@ export default {
     };
   },
   methods: {
-  async logout() {
-    try {
-      // Sign out the user using Firebase Auth
-      await signOut(auth);
-      console.log('Successfully logged out.');
-
-      // Clear any user session or local data (optional, based on your app logic)
-      // localStorage.clear(); // If you are using localStorage for session data
-
-      // Redirect to login page after logout
-      this.$router.replace('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-      // Optionally, show an error message to the user
-      alert('An error occurred while logging out. Please try again.');
-
-      // Redirect to login page in case of an error
-      this.$router.push('/login');
-    }
-  },
-}
+    async logout() {
+      try {
+        await signOut(auth);
+        console.log('Successfully logged out.');
+        this.$router.replace('/login');
+      } catch (error) {
+        console.error('Error logging out:', error);
+        alert('An error occurred while logging out. Please try again.');
+        this.$router.push('/login');
+      }
+    },
+  }
 };
 </script>
 
 <style scoped>
 /* App Bar Styles */
-
 .bg-custom {
   background-color: #034E69;
 }
@@ -235,37 +240,84 @@ ul li a {
   font-size: 1rem; /* Slightly smaller font size */
 }
 ul li a:hover {
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow */
-  transform: scale(1.05); /* Slight zoom effect */
+  transform: scale(1.1); /* Enlarge the item slightly on hover */
+  transition: transform 0.3s ease-in-out; /* Smooth transition */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for better visibility */
 }
 
-
-/* Media Queries for Responsiveness */
-@media (min-width: 1024px) {
-  /* Always visible hamburger on large screens */
-  .lg\:hidden {
-    display: block;
-  }
-
-  /* Sidebar always visible on large screens */
-  .sidebar {
-    transform: translateX(0) !important;
-  }
-
-  .sidebarOpen .main-content {
-    margin-left: 16rem; /* Sidebar width */
-  }
+/* Modal Styles */
+.fixed {
+  position: fixed;
 }
 
-button:hover {
-  color: #787878; /* Change color on hover */
-  transform: scale(1.1); /* Slight zoom effect */
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-.mt-6.flex.justify-between {
-  justify-content: space-evenly;
-  gap: 1rem; /* Add consistent spacing between buttons */
+.bg-black {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
+.bg-white {
+  background-color: white;
+}
 
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-lg {
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.w-80 {
+  width: 20rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.bg-#034E69 {
+  background-color: #034E69;
+}
+
+.text-white {
+  color: white;
+}
+
+.hover\:bg-gray-700:hover {
+  background-color: #2d3748;
+}
+
+.bg-gray-300 {
+  background-color: #e2e8f0;
+}
+
+.text-gray-600 {
+  color: #718096;
+}
 </style>
