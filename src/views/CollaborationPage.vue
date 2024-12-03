@@ -16,7 +16,13 @@
         <p class="text-lg text-gray-600">This is Collaboration Page.</p>
 
         <!-- Power BI Embed (full screen except app bar) -->
-       
+        <iframe
+          title="Collaboration Page"
+          :style="iframeStyle"
+          src="https://app.powerbi.com/view?r=eyJrIjoiM2ZlYmZhNTAtZDM1Yy00ZmQ4LWJhNTUtYjc0NTY1YjliNjI5IiwidCI6ImU5NGQ1N2FkLWEwYjctNDRjZi04ODNmLWQ3OTg3YTBiZDI0NCIsImMiOjEwfQ%3D%3D"
+          frameborder="0"
+          allowFullScreen="true"
+        ></iframe>
       </div>
     </div>
   </div>

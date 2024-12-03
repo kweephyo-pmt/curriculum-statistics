@@ -24,11 +24,11 @@
     <!-- Main Content -->
     <main class="flex-grow flex items-center justify-center text-center px-6 min-h-[calc(100vh-120px)]">
       <div class="text-center">
-        <h2 class="text-5xl font-extrabold text-white mb-8 animate-slideIn">Welcome to SOM BI</h2>
+        <h2 class="text-5xl font-extrabold text-white mb-8 animate-slideIn">Welcome To SOM BI</h2>
         <button 
           @click="goToLogin"
           class="bg-indigo-600 text-white py-4 px-8 rounded-full text-xl hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 animate-fadeInUp shadow-lg">
-          Click here to Login
+          Login
         </button>
       </div>
     </main>

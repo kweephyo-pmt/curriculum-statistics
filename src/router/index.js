@@ -1,42 +1,74 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Welcome from '../components/WelcomePage.vue'
-import Login from '../components/LoginPage.vue'
-import Dashboard from '../components/DashBoard.vue'
+import { createRouter, createWebHistory } from 'vue-router';
 import { auth } from '@/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+
+// Lazy load the components for better performance
+const Welcome = () => import('../components/WelcomePage.vue');
+const Login = () => import('../components/LoginPage.vue');
+const Dashboard = () => import('../components/DashBoard.vue');
+const Overview = () => import('../views/OverviewPage.vue');
+const KPI = () => import('../views/KPIPage.vue');
+const CurriculumStatistics = () => import('../views/CurriculumStatistics.vue');
+const Research = () => import('../views/ResearchPage.vue');
+const AcademicService = () => import('../views/AcademicService.vue');
+const Collaboration = () => import('../views/CollaborationPage.vue');
+const FacultyStaff = () => import('../views/FacultyStaff.vue');
+const Alumni = () => import('../views/AlumniPage.vue');
+const SDGsImpact = () => import('../views/SDGsImpactPage.vue');
+const Management = () => import('../views/ManagementPage.vue');
+const NotFound = () => import('../components/NotFound.vue'); // 404 Page
 
 const routes = [
-  { path: '/', component: Welcome },
-  { path: '/login', component: Login },
-  { path: '/dashboard', component: Dashboard },  // Removed the beforeEnter guard here
-  { path: "/Overview", name: "Overview", component: () => import("../views/OverviewPage.vue") },
-  { path: "/kpi", name: "KPI", component: () => import("../views/KPIPage.vue") },
-  { path: "/curriculum-statistics", name: "Curriculum Statistics", component: () => import("../views/CurriculumStatistics.vue") },
-  { path: "/research", name: "Research", component: () => import("../views/ResearchPage.vue") },
-  { path: "/academic-service", name: "Academic Service", component: () => import("../views/AcademicService.vue") },
-  { path: "/collaboration", name: "Collaboration", component: () => import("../views/CollaborationPage.vue") },
-  { path: "/faculty-staff", name: "Faculty & Staff", component: () => import("../views/FacultyStaff.vue") },
-  { path: "/alumni", name: "Alumni", component: () => import("../views/AlumniPage.vue") },
-  { path: "/sdgs-impact", name: "SDGs Impact", component: () => import("../views/SDGsImpactPage.vue") },
-  { path: "/management", name: "Management", component: () => import("../views/ManagementPage.vue") },
-  { path: '/:catchAll(.*)', redirect: '/login' }  // Redirect for undefined routes
+  { path: '/', name: 'Welcome', component: Welcome },
+  { path: '/login', name: 'Login', component: Login },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: { requiresAuth: true }, // Protected route
+  },
+  { path: '/overview', name: 'Overview', component: Overview, meta: { requiresAuth: true } },
+  { path: '/kpi', name: 'KPI', component: KPI, meta: { requiresAuth: true } },
+  { path: '/curriculum-statistics', name: 'Curriculum Statistics', component: CurriculumStatistics, meta: { requiresAuth: true } },
+  { path: '/research', name: 'Research', component: Research, meta: { requiresAuth: true } },
+  { path: '/academic-service', name: 'Academic Service', component: AcademicService, meta: { requiresAuth: true } },
+  { path: '/collaboration', name: 'Collaboration', component: Collaboration, meta: { requiresAuth: true } },
+  { path: '/faculty-staff', name: 'Faculty & Staff', component: FacultyStaff, meta: { requiresAuth: true } },
+  { path: '/alumni', name: 'Alumni', component: Alumni, meta: { requiresAuth: true } },
+  { path: '/sdgs-impact', name: 'SDGs Impact', component: SDGsImpact, meta: { requiresAuth: true } },
+  { path: '/management', name: 'Management', component: Management, meta: { requiresAuth: true } },
+  { path: '/:catchAll(.*)', name: 'NotFound', component: NotFound }, // 404 Page
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 });
 
-// Global navigation guard
-router.beforeEach((to, from, next) => {
-  if (to.path === '/' || to.path === '/login') {
-    next();
-  } else {
-    const user = auth.currentUser;
-    if (user) {
-      next();  // Proceed if authenticated
+// Ensure Firebase initializes before route navigation
+let isAuthInitialized = false;
+
+const waitForAuth = () =>
+  new Promise((resolve) => {
+    if (isAuthInitialized) {
+      resolve(auth.currentUser);
     } else {
-      next('/login');  // Redirect to login if not authenticated
+      onAuthStateChanged(auth, (user) => {
+        isAuthInitialized = true;
+        resolve(user);
+      });
     }
+  });
+
+router.beforeEach(async (to, from, next) => {
+  const user = await waitForAuth();
+
+  if (to.meta.requiresAuth && !user) {
+    next('/login'); // Redirect to login if the route is protected and user is not authenticated
+  } else if ((to.path === '/login' || to.path === '/') && user) {
+    next('/overview'); // Redirect logged-in users away from login and welcome page
+  } else {
+    next(); // Allow access
   }
 });
 

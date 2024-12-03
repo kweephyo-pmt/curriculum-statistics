@@ -16,7 +16,13 @@
         <p class="text-lg text-gray-600">This is Academic Service.</p>
 
         <!-- Power BI Embed (full screen except app bar) -->
-       
+        <iframe
+          title="Academic Service"
+          :style="iframeStyle"
+          src="https://app.powerbi.com/view?r=eyJrIjoiN2EwZDJiYTktOTM5YS00ODllLWIxNDQtODBhNDhiOTY5OTU3IiwidCI6ImU5NGQ1N2FkLWEwYjctNDRjZi04ODNmLWQ3OTg3YTBiZDI0NCIsImMiOjEwfQ%3D%3D"
+          frameborder="0"
+          allowFullScreen="true"
+        ></iframe>
       </div>
     </div>
   </div>

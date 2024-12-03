@@ -121,18 +121,27 @@ export default {
     };
   },
   methods: {
-    async logout() {
-      try {
-        // Sign out the user using Firebase Auth
-        await signOut(auth);
-        console.log('Successfully logged out.');
-        this.$router.push('/login'); // Redirect to login page after logout
-      } catch (error) {
-        console.error('Error logging out:', error);
-        this.$router.push('/login'); // Redirect even if there's an error
-      }
-    },
+  async logout() {
+    try {
+      // Sign out the user using Firebase Auth
+      await signOut(auth);
+      console.log('Successfully logged out.');
+
+      // Clear any user session or local data (optional, based on your app logic)
+      // localStorage.clear(); // If you are using localStorage for session data
+
+      // Redirect to login page after logout
+      this.$router.replace('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      // Optionally, show an error message to the user
+      alert('An error occurred while logging out. Please try again.');
+
+      // Redirect to login page in case of an error
+      this.$router.push('/login');
+    }
   },
+}
 };
 </script>
 
