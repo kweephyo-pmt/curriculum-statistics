@@ -4,8 +4,8 @@
     <div class="bg-[#034E69] text-white p-3 fixed top-0 left-0 w-full z-20 flex justify-between items-center shadow-md">
       <div class="flex items-center space-x-3">
         <!-- Hamburger Menu -->
-        <div class="cursor-pointer z-30" @click="$emit('toggleSidebar')" aria-label="Open Sidebar">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
+        <div class="cursor-pointer z-30 ml-2" @click="$emit('toggleSidebar')" aria-label="Open Sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </div>

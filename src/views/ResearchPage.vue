@@ -19,8 +19,7 @@
         <iframe
           title="Research"
           :style="iframeStyle"
-          src="https://app.powerbi.com/view?r=eyJrIjoiNDM3ODE5MTUtN2RhMS00ZDgxLWJiY2QtMmJiM2MyOTg2YWFkIiwidCI6ImU5NGQ1N2FkLWEwYjctNDRjZi04ODNmLWQ3OTg3YTBiZDI0NCIsImMiOjEwfQ%3D%3D"
-          frameborder="0"
+          src="https://app.powerbi.com/view?r=eyJrIjoiZTJhYzZjN2ItZTIwMC00NTBhLWEzODgtYTVhZmNjMWY2ZjZhIiwidCI6ImU5NGQ1N2FkLWEwYjctNDRjZi04ODNmLWQ3OTg3YTBiZDI0NCIsImMiOjEwfQ%3D%3D"          frameborder="0"
           allowFullScreen="true"
         ></iframe>
       </div>
